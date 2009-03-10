@@ -1,3 +1,4 @@
+// general definitions
 const L = 0;
 const U = 1;
 const R = 2;
