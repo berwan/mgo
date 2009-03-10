@@ -156,6 +156,7 @@ class Group
       for i in content do
          i.(stone.Stone)check(false);
       end;
+      resetTmp();
    end;
 
    function getColourAt(s: stone.Stone, direction)
@@ -227,6 +228,7 @@ function InBoard.addStone(s: stone.Stone)
    g : Group = makeGroupConnection(s, gr);
    g.clearAll();
    l = g.(Group)calculateLibertiesOf(s,0);
+   g.clearAll();
    debug.debug2("group id %d  %d", g.id, l);
 end;
 
@@ -253,12 +255,6 @@ function InBoard.updateGroups(id)
       end;
       j++;
    end;
-
-   //while j < len(groups) do
-   //   groups[j].(Group)id = j;
-   //   j++;
-   //end;
-   //..grNum = j;
 end;
 
 function InBoard.makeGroupConnection(s: stone.Stone, g: Group) : Group
