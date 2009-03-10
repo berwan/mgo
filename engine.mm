@@ -41,7 +41,7 @@ class InBoard
 
    function addStone(s: stone.Stone) forward;
    function getGroup(s: stone.Stone): Group forward;
-   function makeGroupConnection(s: stone.Stone, g) forward;
+   function makeGroupConnection(s: stone.Stone, g) : Group forward;
    function updateGroups(id) forward;
    function newGroup(color) : Group forward;
 
@@ -214,44 +214,20 @@ class Group
    end;
 
 end;
-
+   
 function InBoard.addStone(s: stone.Stone)
    content[s.x][s.y-1] = s;
    last = s;
    .append(history, s);
    historyCurrent += 1;
 
-//   if .len(groups) = 0 then
-      //.append(groups, Group(s.colour, this));
-//      gr = newGroup(s.colour);
-//      gr.(Group)addStone(s);
-//      debug.debug2("%s %d", "curGroup1:", gr.(Group)id);
-//   else
-      //groups[curGroup].(Group)addStone(s);
-      //groups[curGroup].(Group)resetTmp();
-      //groups[curGroup].(Group)clearAll();
-      //.append(groups, Group(s.colour, this));
-      gr = newGroup(s.colour);
-      gr.(Group)addStone(s);
-      l = gr.(Group)calculateLibertiesOf(s,0);
+   gr = newGroup(s.colour);
+   gr.(Group)addStone(s);
 
-      //if l < 4 then
-      //if l = 4 or groups[curGroup].(Group)colour # s.colour then
-         //groups[curGroup].(Group)removeStone(s);
-         //.append(groups, Group(s.colour, this));
-         //curGroup = .len(groups) - 1;
-         //groups[curGroup].(Group)addStone(s);
-         //debug.debug2("%s %d  %d", "curGroup2:", curGroup, l);
-      //else
-         //gr: Group = getGroup(s);
-         //gr.addStone(s);
-         //gr.clearAll();
-         //gr.resetTmp();
-         debug.debug2("group id %d  %d", gr.(Group)id, l);
-         makeGroupConnection(s, gr);
-         l = gr.(Group)calculateLibertiesOf(s,0);
-      //end;
-//   end;
+   g : Group = makeGroupConnection(s, gr);
+   g.clearAll();
+   l = g.(Group)calculateLibertiesOf(s,0);
+   debug.debug2("group id %d  %d", g.id, l);
 end;
 
 function InBoard.getGroup(s: stone.Stone): Group
@@ -271,32 +247,40 @@ function InBoard.updateGroups(id)
    print "len=",.len(groups), id, ..grNum;
    j = 0;
    while j < len(groups) do
-      if groups[j].(Group)id = id then
-         array.remove(groups, id);
+      if groups[j].(Group)id = j then
+         array.remove(groups, j);
          break;
       end;
       j++;
    end;
 
-   while j < len(groups) do
-      groups[j].(Group)id = j;
-      j++;
-   end;
-   ..grNum = j;
+   //while j < len(groups) do
+   //   groups[j].(Group)id = j;
+   //   j++;
+   //end;
+   //..grNum = j;
 end;
 
-function InBoard.makeGroupConnection(s: stone.Stone, g: Group)
+function InBoard.makeGroupConnection(s: stone.Stone, g: Group) : Group
+
    for i in [C.L, C.U, C.R, C.D] do
       st : stone.Stone = getStoneAt(s, i);
       if st # null then
+         print st;
          gr: Group = getGroup(st);
-         print s.x, s.y, st.x, st.y;
-         print gr.id, g.id;
-         if gr.colour = g.colour and gr.id # g.id then
-            gr.content = array.concat(gr.content, g.content);
-          updateGroups(g.id);
+         if gr # null then
+            tmp = gr;
+            if gr.colour = g.colour and gr.id # g.id then
+               gr.content = array.concat(gr.content, g.content);
+               updateGroups(g.id);
+            end;
          end;
       end;
+   end;
+   if tmp # null then
+      return tmp;
+   else
+      return g;
    end;
 end;
 

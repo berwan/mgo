@@ -7,6 +7,7 @@ use io;
 use stone;
 use engine;
 use debug;
+use constants as C;
 
 class Board
 
@@ -18,7 +19,6 @@ class Board
    w;
    h;
    lx;
-   h_names;
    cursor_x;
    cursor_y;
    bg;
@@ -41,7 +41,6 @@ class Board
  
    // Method constructor
    function init()
-      h_names = ["a", "b", "c", "d", "e", "f", "g", "h", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t"];
       graph.full(true);
       graph.scale(false);
       size = 19;
@@ -82,7 +81,7 @@ class Board
 
    // Method to draw a black stone
    function drawBlackStone(a, y)
-      x = array.index(h_names, a) ;
+      x = array.index(C.h_names, a) ;
       y = y;
       graph.pen(graph.black);
       graph.brush(graph.black);
@@ -94,7 +93,7 @@ class Board
 
    // Method to draw a white stone
    function drawWhiteStone(a, y)
-      x = array.index(h_names, a);
+      x = array.index(C.h_names, a);
       y = y;
       graph.pen(graph.white);
       graph.brush(graph.white);
@@ -108,10 +107,10 @@ class Board
       clearCursor();
       xy = cursor2Board();
       if colour = graph.black then
-         drawBlackStone(h_names[xy[0]], xy[1]);
+         drawBlackStone(C.h_names[xy[0]], xy[1]);
          drawPlayNumber(pNumber, "black");
       else
-         drawWhiteStone(h_names[xy[0]], xy[1]);
+         drawWhiteStone(C.h_names[xy[0]], xy[1]);
          drawPlayNumber(pNumber, "white");
       end;
       drawCursor();
@@ -125,7 +124,7 @@ class Board
    // That function does not redraw the rest of the
    // board.
    function clearStone(a, y)
-      x = array.index(h_names, a) ;
+      x = array.index(C.h_names, a) ;
       y = y;
       // paint the stone with board bg color
       graph.pen(bg);
@@ -147,7 +146,7 @@ class Board
 
    function drawCoord(xy)
       graph.font(["SwissA", 16, true, false]);
-      graph.text(xleft, ybottom + 35, io.format("%s%d", h_names[xy[0]],size - xy[1]));
+      graph.text(xleft, ybottom + 35, io.format("%s%d", C.h_names[xy[0]],size - xy[1]));
    end
 
    function drawPlayNumber(n, c)
@@ -156,11 +155,11 @@ class Board
       graph.pen(graph.white);
       graph.text(xleft + 60, ybottom + 35, io.format("Play Nr: %d", n-1));
       if lastX # "" then
-         graph.text(xleft + 140, ybottom + 35, io.format("- %s%d - %s", h_names[lastX], size - lastY, lastColour));
+         graph.text(xleft + 140, ybottom + 35, io.format("- %s%d - %s", C.h_names[lastX], size - lastY, lastColour));
       end;
       graph.pen(graph.black);
       graph.text(xleft + 60, ybottom + 35, io.format("Play Nr: %d", n));
-      graph.text(xleft + 140, ybottom + 35, io.format("- %s%d - %s", h_names[xy[0]], size - xy[1], c));
+      graph.text(xleft + 140, ybottom + 35, io.format("- %s%d - %s", C.h_names[xy[0]], size - xy[1], c));
       lastX = xy[0];
       lastY = xy[1];
       lastColour = c;
