@@ -226,7 +226,7 @@ function InBoard.addStone(s: stone.Stone)
    gr.(Group)addStone(s);
 
    g : Group = makeGroupConnection(s, gr);
-   l = g.(Group)calculateLibertiesOf(s,0);
+   l = g.calculateLibertiesOf(s,0);
    g.clearAll();
    debug.debug2("group id %d  %d", g.id, l);
 end;
@@ -246,7 +246,7 @@ end;
 
 function InBoard.updateGroups(id)
    j = 0;
-   lg = .len(groups) do
+   lg = .len(groups);
    while j < lg do
       if groups[j].(Group)id = id then
          array.remove(groups, j);
@@ -258,12 +258,12 @@ end;
 
 function InBoard.makeGroupConnection(s: stone.Stone, g: Group) : Group
 
-   gr = null;
+   gr : Group = null;
 
    for i in [C.L, C.U, C.R, C.D] do
       st : stone.Stone = getStoneAt(s, i);
       if st # null then
-         gr: Group = getGroup(st);
+         gr = getGroup(st);
          if gr # null then
             if gr.colour = g.colour and gr.id # g.id then
                gr.content = array.concat(gr.content, g.content);
