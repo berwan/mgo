@@ -246,7 +246,8 @@ end;
 
 function InBoard.updateGroups(id)
    j = 0;
-   while j < len(groups) do
+   lg = .len(groups) do
+   while j < lg do
       if groups[j].(Group)id = id then
          array.remove(groups, j);
          break;
@@ -257,13 +258,13 @@ end;
 
 function InBoard.makeGroupConnection(s: stone.Stone, g: Group) : Group
 
+   gr = null;
+
    for i in [C.L, C.U, C.R, C.D] do
       st : stone.Stone = getStoneAt(s, i);
       if st # null then
-         print st;
          gr: Group = getGroup(st);
          if gr # null then
-            //tmp = gr;
             if gr.colour = g.colour and gr.id # g.id then
                gr.content = array.concat(gr.content, g.content);
                updateGroups(g.id);
@@ -271,6 +272,7 @@ function InBoard.makeGroupConnection(s: stone.Stone, g: Group) : Group
          end;
       end;
    end;
+
    if gr # null then
       return gr;
    else
