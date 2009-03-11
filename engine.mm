@@ -156,6 +156,7 @@ class Group
       for i in content do
          i.(stone.Stone)check(false);
       end;
+      resetTmp();
    end;
 
    function getColourAt(s: stone.Stone, direction)
@@ -225,8 +226,8 @@ function InBoard.addStone(s: stone.Stone)
    gr.(Group)addStone(s);
 
    g : Group = makeGroupConnection(s, gr);
-   g.clearAll();
    l = g.(Group)calculateLibertiesOf(s,0);
+   g.clearAll();
    debug.debug2("group id %d  %d", g.id, l);
 end;
 
@@ -244,21 +245,14 @@ function InBoard.getGroup(s: stone.Stone): Group
 end;
 
 function InBoard.updateGroups(id)
-   print "len=",.len(groups), id, ..grNum;
    j = 0;
    while j < len(groups) do
-      if groups[j].(Group)id = j then
+      if groups[j].(Group)id = id then
          array.remove(groups, j);
          break;
       end;
       j++;
    end;
-
-   //while j < len(groups) do
-   //   groups[j].(Group)id = j;
-   //   j++;
-   //end;
-   //..grNum = j;
 end;
 
 function InBoard.makeGroupConnection(s: stone.Stone, g: Group) : Group
@@ -269,7 +263,7 @@ function InBoard.makeGroupConnection(s: stone.Stone, g: Group) : Group
          print st;
          gr: Group = getGroup(st);
          if gr # null then
-            tmp = gr;
+            //tmp = gr;
             if gr.colour = g.colour and gr.id # g.id then
                gr.content = array.concat(gr.content, g.content);
                updateGroups(g.id);
@@ -277,8 +271,8 @@ function InBoard.makeGroupConnection(s: stone.Stone, g: Group) : Group
          end;
       end;
    end;
-   if tmp # null then
-      return tmp;
+   if gr # null then
+      return gr;
    else
       return g;
    end;

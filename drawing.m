@@ -348,8 +348,8 @@ function main()
             l = 0;
             s: stone.Stone = inBoard.getLast();
             gr : engine.Group = inBoard.getGroup(s);
-            gr.clearAll();
             l = gr.calculateLibertiesOf(s,l);
+            gr.clearAll();
             if s # null then
                debug.debug("%s%d %d",s.a, s.y, l);
             end;
